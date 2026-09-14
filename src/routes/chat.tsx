@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowLeft, ArrowUp, Bot, CircleHelp, HeartHandshake, School, Search, Square, User } from "lucide-react";
+import { ArrowLeft, ArrowUp, Bot, CircleHelp, HeartHandshake, Plus, School, Search, Square, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { PageTransition } from "@/components/PageTransition";
@@ -50,6 +50,7 @@ function ChatPage() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const abortRef = useRef<AbortController | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
