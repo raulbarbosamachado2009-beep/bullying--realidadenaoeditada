@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Register uploaded font assets centrally in the root document and map all font roles to the shared family, so every screen uses the same supplied typography.
+- Compose chat messages, transcript, input, and loading states with AI Elements while preserving the existing streaming transport.
+- Keep the educational Home as an editorial page with its own navigation, leaving shared navigation on other screens unchanged.

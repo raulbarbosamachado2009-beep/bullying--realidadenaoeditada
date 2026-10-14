@@ -100,22 +100,28 @@
   --sidebar-ring: oklch(0.66 0.18 253);
 
   --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
-  --gradient-surface: linear-gradient(
-    160deg,
-    oklch(1 0 0 / 9%),
-    oklch(1 0 0 / 2%)
-  );
+  --gradient-surface: linear-gradient(160deg, oklch(1 0 0 / 9%), oklch(1 0 0 / 2%));
   --shadow-elevated: 0 24px 70px -30px oklch(0 0 0 / 90%);
   --shadow-glow: 0 0 80px -20px color-mix(in oklab, var(--primary) 55%, transparent);
+  --chat-background: oklch(0.245 0 0);
+  --chat-surface: oklch(0.29 0 0);
+  --chat-control: oklch(0.96 0 0);
+  --editorial-accent: oklch(0.76 0.1 285);
+  --gradient-editorial: linear-gradient(90deg, var(--editorial-accent), var(--primary));
+  --shadow-composer: 0 2px 8px oklch(0 0 0 / 12%);
   --ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 @theme inline {
   --color-primary-glow: var(--primary-glow);
   --color-success: var(--success);
-  --font-sans:
-    "SF Pro Display", "SF Pro Text", "Inter", -apple-system, BlinkMacSystemFont, system-ui,
-    sans-serif;
+  --font-sans: "San Francisco";
+  --font-mono: "San Francisco";
+  --font-serif: "San Francisco";
+  --color-chat-background: var(--chat-background);
+  --color-chat-surface: var(--chat-surface);
+  --color-chat-control: var(--chat-control);
+  --color-editorial-accent: var(--editorial-accent);
 }
 
 @utility glass {
@@ -149,7 +155,7 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.011em;
+    letter-spacing: 0;
   }
 
   html {
@@ -182,7 +188,7 @@
   h1,
   h2,
   h3 {
-    letter-spacing: -0.035em;
+    letter-spacing: 0;
   }
 }
 
@@ -202,5 +208,50 @@
   *::after {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+@layer base {
+  input,
+  textarea,
+  button,
+  select,
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: var(--font-sans);
+  }
+}
+.chat-composer [data-slot="input-group"] {
+  border-radius: 26px;
+  background: var(--chat-surface);
+  border-color: var(--border);
+  box-shadow: var(--shadow-composer);
+  height: auto;
+  overflow: hidden;
+}
+.chat-composer [data-slot="input-group"]:focus-within {
+  border-color: var(--muted-foreground);
+  box-shadow: none;
+}
+.editorial-hero-image {
+  mask-image: linear-gradient(to right, transparent 18%, black 62%);
+}
+.editorial-bar {
+  background: var(--gradient-editorial);
+}
+.editorial-grid > article {
+  border-bottom: 1px solid var(--border);
+}
+@media (min-width: 768px) {
+  .editorial-grid > article:nth-child(odd) {
+    border-right: 1px solid var(--border);
+  }
+}
+@media (max-width: 767px) {
+  .editorial-hero-image {
+    mask-image: linear-gradient(to bottom, transparent, black 45%, transparent);
+    opacity: 0.55;
   }
 }
