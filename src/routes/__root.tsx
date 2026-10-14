@@ -10,6 +10,14 @@ import {
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "../components/ui/sonner";
 
+import regularFont from "@/assets/fonts/sf-pro-display-regular.otf.asset.json";
+import mediumFont from "@/assets/fonts/sf-pro-display-medium.otf.asset.json";
+import semiboldFont from "@/assets/fonts/sf-pro-display-semibold.otf.asset.json";
+import boldFont from "@/assets/fonts/sf-pro-display-bold.otf.asset.json";
+
+const fontFaces = [[regularFont.url, 400], [mediumFont.url, 500], [semiboldFont.url, 600], [boldFont.url, 700]]
+  .map(([url, weight]) => `@font-face{font-family:"San Francisco";src:url("${url}") format("opentype");font-weight:${weight};font-style:normal;font-display:swap;}`).join("\n");
+
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -94,12 +102,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
-      },
+      { rel: "preload", href: regularFont.url, as: "font", type: "font/otf", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
         href: appCss,
@@ -118,6 +121,7 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="pt-BR" className="dark">
       <head>
         <HeadContent />
+        <style>{fontFaces}</style>
       </head>
       <body>
         {children}

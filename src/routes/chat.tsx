@@ -1,8 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "motion/react";
-import { ArrowLeft, ArrowUp, Bot, CircleHelp, HeartHandshake, Plus, School, Search, Square, User } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { AnimatedBackground } from "@/components/AnimatedBackground";
+
+import { ArrowLeft, ArrowUp, CircleHelp, HeartHandshake, Plus, School, Search, Square, RotateCcw, UserRound, ShieldCheck } from "lucide-react";
+import { useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
+import { Message as ChatMessage, MessageContent, MessageResponse, MessageActions, MessageAction } from "@/components/ai-elements/message";
+import { PromptInput, PromptInputTextarea, PromptInputFooter, PromptInputSubmit } from "@/components/ai-elements/prompt-input";
+import { Shimmer } from "@/components/ai-elements/shimmer";
+import { Copy } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
 import iaBullyingIcon from "@/assets/ia-bullying-icon.png.asset.json";
 import { toast } from "sonner";
@@ -52,11 +57,7 @@ function ChatPage() {
   const [error, setError] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const abortRef = useRef<AbortController | null>(null);
-  const endRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   async function send(text: string) {
     const value = text.trim();
@@ -143,232 +144,91 @@ function ChatPage() {
 
   const started = messages.some((m) => m.role === "user");
 
-  const mobileHeader = (
-    <header className="fixed inset-x-0 top-0 z-50 lg:hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background: "rgba(15, 23, 42, 0.55)",
-          backdropFilter: "blur(28px) saturate(140%)",
-          maskImage:
-            "linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 55%, transparent 100%)",
-        }}
-      />
-      <div className="relative flex h-[64px] items-center gap-3 px-4 pt-[env(safe-area-inset-top)]">
-        <Link
-          to="/home"
-          aria-label="Voltar para a página inicial"
-          className="focus-ring inline-flex size-10 shrink-0 items-center justify-center rounded-full text-foreground"
-        >
-          <ArrowLeft className="size-7" strokeWidth={2.25} aria-hidden="true" />
-        </Link>
-        <img
-          src={iaBullyingIcon.url}
-          alt=""
-          aria-hidden="true"
-          className="size-11 shrink-0 rounded-[13px] object-cover"
-        />
-        <div className="min-w-0 flex-1">
-          <h1 className="truncate text-[17px] font-semibold leading-tight">IA Bullying</h1>
-          <p className="truncate text-[13px] leading-tight text-muted-foreground">ajudante pessoal</p>
-        </div>
-      </div>
-    </header>
-  );
-
   const composer = (
     <div className="w-full">
-      {error ? (
-        <p
-          role="alert"
-          className="mb-3 rounded-2xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-foreground"
-        >
-          {error}
-        </p>
+      {error ? <p role="alert" className="mb-3 text-sm text-destructive">{error}</p> : null}
+      <PromptInput onSubmit={({ text }) => { void send(text); }} className="chat-composer">
+        <PromptInputTextarea
+          aria-label="Escreva sua mensagem"
+          placeholder="Pergunte o que quiser"
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
+          className="min-h-[58px] px-5 pt-4 pb-2 text-base placeholder:text-muted-foreground"
+        />
+        <PromptInputFooter className="justify-between px-3 pb-3">
+          <div className="flex items-center gap-2">
+            <Button type="button" variant="outline" onClick={() => setShowSuggestions((value) => !value)} aria-expanded={showSuggestions} className="h-8 rounded-full border-border bg-transparent px-3 text-xs hover:bg-secondary">
+              <Plus aria-hidden="true" /> Perguntas
+            </Button>
+            <Button type="button" variant="outline" onClick={() => setInput("Como posso pedir ajuda com segurança?")} className="h-8 rounded-full border-border bg-transparent px-3 text-xs hover:bg-secondary">
+              <ShieldCheck aria-hidden="true" /> Pedir ajuda
+            </Button>
+          </div>
+          <PromptInputSubmit status={loading ? "streaming" : "ready"} onStop={() => abortRef.current?.abort()} disabled={!loading && !input.trim()} aria-label={loading ? "Parar resposta" : "Enviar mensagem"} className="size-9 shrink-0 rounded-full bg-chat-control text-chat-background hover:bg-foreground disabled:bg-secondary disabled:text-muted-foreground">
+            {loading ? <Square className="size-4" /> : <ArrowUp className="size-5" />}
+          </PromptInputSubmit>
+        </PromptInputFooter>
+      </PromptInput>
+      {showSuggestions && !started ? (
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          {suggestions.map(({ Icon, text }, index) => (
+            <Button key={text} variant="outline" disabled={loading} onClick={() => void send(text)} className="h-10 rounded-full border-border bg-transparent px-3.5 text-xs font-normal text-muted-foreground hover:bg-secondary hover:text-foreground">
+              <Icon aria-hidden="true" className={index === 0 ? "text-editorial-accent" : index === 1 ? "text-primary-glow" : index === 2 ? "text-primary" : "text-success"} /> {text}
+            </Button>
+          ))}
+        </div>
       ) : null}
-
-      <div className="flex flex-col-reverse gap-3 lg:flex-col">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            void send(input);
-          }}
-          className="rounded-[28px] border border-border bg-card/60 p-3 backdrop-blur-2xl"
-        >
-          <label htmlFor="chat-input" className="sr-only">
-            Escreva sua mensagem
-          </label>
-          <textarea
-            id="chat-input"
-            rows={1}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                void send(input);
-              }
-            }}
-            placeholder="Como posso te ajudar hoje?"
-            className="max-h-40 w-full resize-none bg-transparent px-2 py-2 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none"
-          />
-
-          <div className="mt-1 flex items-center gap-2">
-            <button
-              type="button"
-              aria-label="Sugestões de perguntas"
-              onClick={() => setShowSuggestions((v) => !v)}
-              aria-expanded={showSuggestions}
-              className="focus-ring inline-flex size-9 items-center justify-center rounded-full bg-secondary text-foreground transition-transform active:scale-95"
-            >
-              <Plus className="size-4" aria-hidden="true" />
-            </button>
-            <span className="flex-1 text-center text-xs text-muted-foreground">IA Bullying 1.0</span>
-            {loading ? (
-              <button
-                type="button"
-                aria-label="Parar resposta"
-                onClick={() => abortRef.current?.abort()}
-                className="focus-ring inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"
-              >
-                <Square className="size-4" aria-hidden="true" />
-              </button>
-            ) : (
-              <button
-                type="submit"
-                aria-label="Enviar mensagem"
-                disabled={!input.trim()}
-                className="focus-ring inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity disabled:opacity-40"
-              >
-                <ArrowUp className="size-5" aria-hidden="true" />
-              </button>
-            )}
-          </div>
-        </form>
-
-        {showSuggestions ? (
-          <div className="flex flex-wrap justify-center gap-2">
-            {suggestions.map((s) => (
-              <button
-                key={s.text}
-                type="button"
-                onClick={() => void send(s.text)}
-                disabled={loading}
-                className="focus-ring rounded-full border border-border bg-card/40 px-3.5 py-2 text-xs text-muted-foreground backdrop-blur-xl transition-all hover:text-foreground active:scale-95"
-              >
-                <s.Icon aria-hidden="true" className="mr-1 inline size-3.5" />
-                {s.text}
-              </button>
-            ))}
-          </div>
-        ) : null}
-      </div>
     </div>
   );
 
-
-  if (!started) {
-    return (
-      <PageTransition>
-        <AnimatedBackground />
-        {mobileHeader}
-        <div className="flex min-h-dvh flex-col pt-[64px] lg:pt-0">
-          <header className="hidden items-center gap-3 px-5 py-5 lg:flex">
-            <Link
-              to="/home"
-              aria-label="Voltar para a home"
-              className="focus-ring glass inline-flex size-11 items-center justify-center rounded-2xl"
-            >
-              <ArrowLeft className="size-5" aria-hidden="true" />
-            </Link>
-          </header>
-
-          <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center px-4 pb-10">
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
-              className="w-full text-center"
-            >
-              <h1 className="text-gradient hidden text-3xl font-semibold sm:text-5xl lg:block">
-                IA Educativa
-              </h1>
-              <p className="mx-auto mt-3 hidden max-w-lg text-sm text-muted-foreground sm:text-base lg:block">
-                Assistente educacional sobre bullying: entenda os tipos, reconheça sinais de alerta,
-                saiba como agir, apoiar e denunciar com segurança.
-              </p>
-              <div className="lg:mt-8">{composer}</div>
-            </motion.div>
-          </main>
-        </div>
-      </PageTransition>
-    );
-  }
-
   return (
     <PageTransition>
-      <AnimatedBackground />
-      {mobileHeader}
-      <div className="flex min-h-dvh flex-col pt-[64px] lg:pt-0">
-        <header className="hidden items-center gap-3 px-5 py-5 lg:flex">
-          <Link
-            to="/home"
-            aria-label="Voltar para a home"
-            className="focus-ring glass inline-flex size-11 items-center justify-center rounded-2xl"
-          >
-            <ArrowLeft className="size-5" aria-hidden="true" />
-          </Link>
-          <div>
-            <h1 className="text-base font-semibold">IA Educativa</h1>
-            <p className="text-xs text-muted-foreground">Assistente sobre bullying</p>
+      <div className="flex h-dvh flex-col bg-chat-background text-foreground">
+        <header className="z-20 flex h-[76px] shrink-0 items-center justify-between gap-3 bg-chat-background px-4 pt-[env(safe-area-inset-top)] sm:px-6">
+          <div className="flex min-w-0 items-center gap-3">
+            <Button asChild variant="ghost" size="icon" className="shrink-0 rounded-full hover:bg-secondary">
+              <Link to="/home" aria-label="Voltar para a página inicial"><ArrowLeft className="size-5" /></Link>
+            </Button>
+            <img src={iaBullyingIcon.url} alt="" className="size-10 shrink-0 rounded-xl object-cover" width={40} height={40} />
+            <div className="min-w-0">
+              <p className="text-base font-semibold">IA Bullying</p>
+              <p className="text-xs text-muted-foreground">ajudante pessoal</p>
+            </div>
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            {started ? <Button variant="ghost" size="icon" className="rounded-full hover:bg-secondary" aria-label="Nova conversa" title="Nova conversa" onClick={() => { abortRef.current?.abort(); setMessages(initialMessages); setError(null); setInput(""); }}><RotateCcw /></Button> : null}
+            <Button asChild variant="secondary" className="hidden h-8 rounded-full text-xs sm:inline-flex"><Link to="/minigames">Explorar jogos</Link></Button>
+            <Button asChild variant="outline" className="size-9 rounded-full border-border bg-transparent p-0 hover:bg-secondary"><Link to="/perfil" aria-label="Meu perfil"><UserRound /></Link></Button>
           </div>
         </header>
-
-        <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-56 sm:pb-52">
-          <div className="space-y-6 py-6" role="log" aria-live="polite">
-            <AnimatePresence initial={false}>
-              {messages.map((m) => (
-                <motion.div
-                  key={m.id}
-                  initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-                  className={
-                    m.role === "user" ? "flex justify-end gap-3" : "flex justify-start gap-3"
-                  }
-                >
-                  {m.role === "assistant" ? (
-                    <span className="glass mt-1 inline-flex size-8 shrink-0 items-center justify-center rounded-full">
-                      <Bot className="size-4 text-primary" aria-hidden="true" />
-                    </span>
-                  ) : null}
-                  <p
-                    className={
-                      m.role === "user"
-                        ? "max-w-[80%] rounded-3xl bg-primary px-5 py-3 text-sm leading-relaxed text-primary-foreground"
-                        : "max-w-[85%] text-sm leading-relaxed text-foreground"
-                    }
-                  >
-                    {m.text || (
-                      <span className="animate-pulse text-muted-foreground">Pensando…</span>
-                    )}
-                  </p>
-                  {m.role === "user" ? (
-                    <span className="glass mt-1 inline-flex size-8 shrink-0 items-center justify-center rounded-full">
-                      <User className="size-4" aria-hidden="true" />
-                    </span>
-                  ) : null}
-                </motion.div>
-              ))}
-            </AnimatePresence>
-            <div ref={endRef} />
-          </div>
-        </main>
-
-        <div className="fixed inset-x-0 bottom-0 z-40 bg-gradient-to-t from-background via-background/90 to-transparent px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-6 lg:pb-4">
-          <div className="mx-auto w-full max-w-3xl">{composer}</div>
-        </div>
+        {!started ? (
+          <main className="flex flex-1 items-center justify-center px-4 pb-20">
+            <div className="w-full max-w-[770px]">
+              <h1 className="mb-10 text-center text-3xl font-semibold">IA Bullying</h1>
+              {composer}
+            </div>
+          </main>
+        ) : (
+          <>
+            <Conversation className="min-h-0 flex-1">
+              <ConversationContent className="mx-auto w-full max-w-[770px] gap-7 px-5 py-6">
+                {messages.map((message) => (
+                  <ChatMessage key={message.id} from={message.role}>
+                    <MessageContent className="text-base leading-7 group-[.is-user]:rounded-3xl group-[.is-user]:bg-chat-surface group-[.is-user]:text-foreground">
+                      {message.text ? <MessageResponse>{message.text}</MessageResponse> : <Shimmer>Pensando…</Shimmer>}
+                    </MessageContent>
+                    {message.role === "assistant" && message.text ? <MessageActions><MessageAction label="Copiar resposta" tooltip="Copiar resposta" onClick={() => { void navigator.clipboard.writeText(message.text); toast.success("Resposta copiada"); }}><Copy className="size-3.5" /></MessageAction></MessageActions> : null}
+                  </ChatMessage>
+                ))}
+              </ConversationContent>
+              <ConversationScrollButton className="bg-chat-surface" />
+            </Conversation>
+            <div className="mx-auto w-full max-w-[802px] shrink-0 px-4 pt-3">{composer}</div>
+          </>
+        )}
+        <footer className="shrink-0 px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] text-center text-[11px] text-muted-foreground">
+          A IA pode cometer erros. Em situações de risco, procure um adulto de confiança.
+        </footer>
       </div>
     </PageTransition>
   );
