@@ -1,5 +1,9 @@
 # Roadmap
 
+- [ ] Aplicar exclusivamente as quatro fontes San Francisco enviadas em todo o site
+- [ ] Recriar IA conforme nova referência em modo escuro, preservando identidade do cabeçalho
+- [ ] Reformular Home conforme referência Gladia e entregar preview verificado
+
 - [x] Localizar todos os emojis visíveis no site
 - [x] Substituir por ícones vetoriais mantendo acessibilidade e layout
 - [x] Validar páginas mobile e desktop
