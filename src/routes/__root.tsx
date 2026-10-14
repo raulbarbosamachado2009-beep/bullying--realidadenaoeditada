@@ -16,8 +16,17 @@ import mediumFont from "@/assets/fonts/sf-pro-display-medium.otf.asset.json";
 import semiboldFont from "@/assets/fonts/sf-pro-display-semibold.otf.asset.json";
 import boldFont from "@/assets/fonts/sf-pro-display-bold.otf.asset.json";
 
-const fontFaces = [[regularFont.url, 400], [mediumFont.url, 500], [semiboldFont.url, 600], [boldFont.url, 700]]
-  .map(([url, weight]) => `@font-face{font-family:"San Francisco";src:url("${url}") format("opentype");font-weight:${weight};font-style:normal;font-display:swap;}`).join("\n");
+const fontFaces = [
+  [regularFont.url, 400],
+  [mediumFont.url, 500],
+  [semiboldFont.url, 600],
+  [boldFont.url, 700],
+]
+  .map(
+    ([url, weight]) =>
+      `@font-face{font-family:"San Francisco";src:url("${url}") format("opentype");font-weight:${weight};font-style:normal;font-display:swap;}`,
+  )
+  .join("\n");
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -103,7 +112,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "preload", href: regularFont.url, as: "font", type: "font/otf", crossOrigin: "anonymous" },
+      {
+        rel: "preload",
+        href: regularFont.url,
+        as: "font",
+        type: "font/otf",
+        crossOrigin: "anonymous",
+      },
       {
         rel: "stylesheet",
         href: appCss,

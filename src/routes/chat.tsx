@@ -1,11 +1,38 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-import { ArrowLeft, ArrowUp, CircleHelp, HeartHandshake, Plus, School, Search, Square, RotateCcw, UserRound, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowUp,
+  CircleHelp,
+  HeartHandshake,
+  Plus,
+  School,
+  Search,
+  Square,
+  RotateCcw,
+  UserRound,
+  ShieldCheck,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
-import { Message as ChatMessage, MessageContent, MessageResponse, MessageActions, MessageAction } from "@/components/ai-elements/message";
-import { PromptInput, PromptInputTextarea, PromptInputFooter, PromptInputSubmit } from "@/components/ai-elements/prompt-input";
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
+import {
+  Message as ChatMessage,
+  MessageContent,
+  MessageResponse,
+  MessageActions,
+  MessageAction,
+} from "@/components/ai-elements/message";
+import {
+  PromptInput,
+  PromptInputTextarea,
+  PromptInputFooter,
+  PromptInputSubmit,
+} from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { Copy } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
@@ -58,7 +85,6 @@ function ChatPage() {
   const [showSuggestions, setShowSuggestions] = useState(true);
   const abortRef = useRef<AbortController | null>(null);
 
-
   async function send(text: string) {
     const value = text.trim();
     if (!value || loading) return;
@@ -82,8 +108,12 @@ function ChatPage() {
         }),
       });
 
-      if (res.status === 429) throw new Error("Muitas mensagens em pouco tempo. Tente novamente em instantes.");
-      if (res.status === 402) throw new Error("Os créditos de IA acabaram. Peça ao responsável pelo projeto para recarregar.");
+      if (res.status === 429)
+        throw new Error("Muitas mensagens em pouco tempo. Tente novamente em instantes.");
+      if (res.status === 402)
+        throw new Error(
+          "Os créditos de IA acabaram. Peça ao responsável pelo projeto para recarregar.",
+        );
       if (!res.ok || !res.body) throw new Error("Não consegui responder agora. Tente novamente.");
 
       const reader = res.body.getReader();
@@ -112,7 +142,8 @@ function ChatPage() {
               setMessages((prev) => {
                 const next = [...prev];
                 const last = next[next.length - 1];
-                if (last && last.role === "assistant") next[next.length - 1] = { ...last, text: answer };
+                if (last && last.role === "assistant")
+                  next[next.length - 1] = { ...last, text: answer };
                 return next;
               });
             }
@@ -127,7 +158,10 @@ function ChatPage() {
           const next = [...prev];
           const last = next[next.length - 1];
           if (last && last.role === "assistant")
-            next[next.length - 1] = { ...last, text: "Não consegui gerar uma resposta. Pode reformular a pergunta?" };
+            next[next.length - 1] = {
+              ...last,
+              text: "Não consegui gerar uma resposta. Pode reformular a pergunta?",
+            };
           return next;
         });
       }
@@ -146,8 +180,17 @@ function ChatPage() {
 
   const composer = (
     <div className="w-full">
-      {error ? <p role="alert" className="mb-3 text-sm text-destructive">{error}</p> : null}
-      <PromptInput onSubmit={({ text }) => { void send(text); }} className="chat-composer">
+      {error ? (
+        <p role="alert" className="mb-3 text-sm text-destructive">
+          {error}
+        </p>
+      ) : null}
+      <PromptInput
+        onSubmit={({ text }) => {
+          void send(text);
+        }}
+        className="chat-composer"
+      >
         <PromptInputTextarea
           aria-label="Escreva sua mensagem"
           placeholder="Pergunte o que quiser"
@@ -157,14 +200,31 @@ function ChatPage() {
         />
         <PromptInputFooter className="justify-between px-3 pb-3">
           <div className="flex items-center gap-2">
-            <Button type="button" variant="outline" onClick={() => setShowSuggestions((value) => !value)} aria-expanded={showSuggestions} className="h-8 rounded-full border-border bg-transparent px-3 text-xs hover:bg-secondary">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowSuggestions((value) => !value)}
+              aria-expanded={showSuggestions}
+              className="h-8 rounded-full border-border bg-transparent px-3 text-xs hover:bg-secondary"
+            >
               <Plus aria-hidden="true" /> Perguntas
             </Button>
-            <Button type="button" variant="outline" onClick={() => setInput("Como posso pedir ajuda com segurança?")} className="h-8 rounded-full border-border bg-transparent px-3 text-xs hover:bg-secondary">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setInput("Como posso pedir ajuda com segurança?")}
+              className="h-8 rounded-full border-border bg-transparent px-3 text-xs hover:bg-secondary"
+            >
               <ShieldCheck aria-hidden="true" /> Pedir ajuda
             </Button>
           </div>
-          <PromptInputSubmit status={loading ? "streaming" : "ready"} onStop={() => abortRef.current?.abort()} disabled={!loading && !input.trim()} aria-label={loading ? "Parar resposta" : "Enviar mensagem"} className="size-9 shrink-0 rounded-full bg-chat-control text-chat-background hover:bg-foreground disabled:bg-secondary disabled:text-muted-foreground">
+          <PromptInputSubmit
+            status={loading ? "streaming" : "ready"}
+            onStop={() => abortRef.current?.abort()}
+            disabled={!loading && !input.trim()}
+            aria-label={loading ? "Parar resposta" : "Enviar mensagem"}
+            className="size-9 shrink-0 rounded-full bg-chat-control text-chat-background hover:bg-foreground disabled:bg-secondary disabled:text-muted-foreground"
+          >
             {loading ? <Square className="size-4" /> : <ArrowUp className="size-5" />}
           </PromptInputSubmit>
         </PromptInputFooter>
@@ -172,8 +232,26 @@ function ChatPage() {
       {showSuggestions && !started ? (
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           {suggestions.map(({ Icon, text }, index) => (
-            <Button key={text} variant="outline" disabled={loading} onClick={() => void send(text)} className="h-10 rounded-full border-border bg-transparent px-3.5 text-xs font-normal text-muted-foreground hover:bg-secondary hover:text-foreground">
-              <Icon aria-hidden="true" className={index === 0 ? "text-editorial-accent" : index === 1 ? "text-primary-glow" : index === 2 ? "text-primary" : "text-success"} /> {text}
+            <Button
+              key={text}
+              variant="outline"
+              disabled={loading}
+              onClick={() => void send(text)}
+              className="h-10 rounded-full border-border bg-transparent px-3.5 text-xs font-normal text-muted-foreground hover:bg-secondary hover:text-foreground"
+            >
+              <Icon
+                aria-hidden="true"
+                className={
+                  index === 0
+                    ? "text-editorial-accent"
+                    : index === 1
+                      ? "text-primary-glow"
+                      : index === 2
+                        ? "text-primary"
+                        : "text-success"
+                }
+              />{" "}
+              {text}
             </Button>
           ))}
         </div>
@@ -186,19 +264,62 @@ function ChatPage() {
       <div className="flex h-dvh flex-col bg-chat-background text-foreground">
         <header className="z-20 flex h-[76px] shrink-0 items-center justify-between gap-3 bg-chat-background px-4 pt-[env(safe-area-inset-top)] sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
-            <Button asChild variant="ghost" size="icon" className="shrink-0 rounded-full hover:bg-secondary">
-              <Link to="/home" aria-label="Voltar para a página inicial"><ArrowLeft className="size-5" /></Link>
+            <Button
+              asChild
+              variant="ghost"
+              size="icon"
+              className="shrink-0 rounded-full hover:bg-secondary"
+            >
+              <Link to="/home" aria-label="Voltar para a página inicial">
+                <ArrowLeft className="size-5" />
+              </Link>
             </Button>
-            <img src={iaBullyingIcon.url} alt="" className="size-10 shrink-0 rounded-xl object-cover" width={40} height={40} />
+            <img
+              src={iaBullyingIcon.url}
+              alt=""
+              className="size-10 shrink-0 rounded-xl object-cover"
+              width={40}
+              height={40}
+            />
             <div className="min-w-0">
               <p className="text-base font-semibold">IA Bullying</p>
               <p className="text-xs text-muted-foreground">ajudante pessoal</p>
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            {started ? <Button variant="ghost" size="icon" className="rounded-full hover:bg-secondary" aria-label="Nova conversa" title="Nova conversa" onClick={() => { abortRef.current?.abort(); setMessages(initialMessages); setError(null); setInput(""); }}><RotateCcw /></Button> : null}
-            <Button asChild variant="secondary" className="hidden h-8 rounded-full text-xs sm:inline-flex"><Link to="/minigames">Explorar jogos</Link></Button>
-            <Button asChild variant="outline" className="size-9 rounded-full border-border bg-transparent p-0 hover:bg-secondary"><Link to="/perfil" aria-label="Meu perfil"><UserRound /></Link></Button>
+            {started ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full hover:bg-secondary"
+                aria-label="Nova conversa"
+                title="Nova conversa"
+                onClick={() => {
+                  abortRef.current?.abort();
+                  setMessages(initialMessages);
+                  setError(null);
+                  setInput("");
+                }}
+              >
+                <RotateCcw />
+              </Button>
+            ) : null}
+            <Button
+              asChild
+              variant="secondary"
+              className="hidden h-8 rounded-full text-xs sm:inline-flex"
+            >
+              <Link to="/minigames">Explorar jogos</Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="size-9 rounded-full border-border bg-transparent p-0 hover:bg-secondary"
+            >
+              <Link to="/perfil" aria-label="Meu perfil">
+                <UserRound />
+              </Link>
+            </Button>
           </div>
         </header>
         {!started ? (
@@ -215,9 +336,26 @@ function ChatPage() {
                 {messages.map((message) => (
                   <ChatMessage key={message.id} from={message.role}>
                     <MessageContent className="text-base leading-7 group-[.is-user]:rounded-3xl group-[.is-user]:bg-chat-surface group-[.is-user]:text-foreground">
-                      {message.text ? <MessageResponse>{message.text}</MessageResponse> : <Shimmer>Pensando…</Shimmer>}
+                      {message.text ? (
+                        <MessageResponse>{message.text}</MessageResponse>
+                      ) : (
+                        <Shimmer>Pensando…</Shimmer>
+                      )}
                     </MessageContent>
-                    {message.role === "assistant" && message.text ? <MessageActions><MessageAction label="Copiar resposta" tooltip="Copiar resposta" onClick={() => { void navigator.clipboard.writeText(message.text); toast.success("Resposta copiada"); }}><Copy className="size-3.5" /></MessageAction></MessageActions> : null}
+                    {message.role === "assistant" && message.text ? (
+                      <MessageActions>
+                        <MessageAction
+                          label="Copiar resposta"
+                          tooltip="Copiar resposta"
+                          onClick={() => {
+                            void navigator.clipboard.writeText(message.text);
+                            toast.success("Resposta copiada");
+                          }}
+                        >
+                          <Copy className="size-3.5" />
+                        </MessageAction>
+                      </MessageActions>
+                    ) : null}
                   </ChatMessage>
                 ))}
               </ConversationContent>
