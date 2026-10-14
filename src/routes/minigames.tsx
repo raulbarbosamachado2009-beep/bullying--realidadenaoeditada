@@ -25,6 +25,8 @@ import { BentoGrid } from "@/components/ui/bento-grid";
 export const Route = createFileRoute("/minigames")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Minigames Educativos — Imersão Bullying" },
       {
         name: "description",

@@ -1,44 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion, AnimatePresence } from "motion/react";
-import { useState } from "react";
-import {
-  AlertTriangle,
-  Bot,
-  BookOpen,
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  Globe,
-  Gamepad2,
-  HeartHandshake,
-  Landmark,
-  MessageSquare,
-  Sparkle,
-  Users,
-  X,
-  Zap,
-  Brain,
-  ShieldCheck,
-  RotateCcw,
-} from "lucide-react";
-import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { ArrowDown, ArrowUpRight, Brain, Check, Globe, HeartHandshake, Landmark, MessageSquare, ShieldCheck, Sparkle, Users, Zap } from "lucide-react";
 import { Footer } from "@/components/Footer";
-import { GlassCard } from "@/components/GlassCard";
-import { Navbar } from "@/components/Navbar";
-import { MobileTabBar, MobileTabBarSpacer, MobileTopBar } from "@/components/MobileShell";
+import { MobileTabBar, MobileTabBarSpacer } from "@/components/MobileShell";
 import { PageTransition } from "@/components/PageTransition";
-import { SectionTitle } from "@/components/SectionTitle";
 import { Button } from "@/components/ui/button";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import solidarityImage from "@/assets/home-solidarity.jpg";
 
 export const Route = createFileRoute("/home")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Imersão Bullying — Realidade não Editada" },
       {
         name: "description",
@@ -65,13 +38,6 @@ const types = [
   { Icon: Landmark, title: "Religioso", text: "Zombarias e discriminação por crença ou fé." },
 ];
 
-const mobileShortcuts = [
-  { to: "/minigames" as const, Icon: Gamepad2, title: "Minigames", text: "6 desafios rápidos" },
-  { to: "/chat" as const, Icon: Bot, title: "IA Educativa", text: "Tire suas dúvidas" },
-  { to: "/home" as const, hash: "aprender", Icon: BookOpen, title: "Aprender", text: "Tipos e sinais" },
-  { to: "/" as const, Icon: RotateCcw, title: "Recomeçar", text: "Refazer a imersão" },
-];
-
 const signs = [
   "Queda repentina no rendimento escolar",
   "Recusa constante em ir à escola",
@@ -81,26 +47,12 @@ const signs = [
   "Queixas frequentes de dores sem causa aparente",
 ];
 
-const prevention = [
-  { title: "Diálogo aberto", text: "Espaços seguros para falar sem medo de julgamento." },
-  { title: "Educação emocional", text: "Trabalhar empatia, limites e resolução de conflitos." },
-  { title: "Regras claras", text: "Combinados coletivos e consequências conhecidas por todos." },
-  { title: "Protagonismo juvenil", text: "Estudantes como agentes de acolhimento na escola." },
-];
-
 const steps = [
   { title: "Reconheça", text: "Nomeie o que está acontecendo. Bullying não é brincadeira." },
   { title: "Registre", text: "Anote datas, locais e salve prints em casos virtuais." },
   { title: "Comunique", text: "Procure professores, coordenação ou responsáveis." },
   { title: "Acolha", text: "Apoie a vítima, escute sem culpar e mantenha presença." },
   { title: "Acompanhe", text: "Verifique se as medidas funcionaram e siga monitorando." },
-];
-
-const stats = [
-  { label: "Verbal", value: 42 },
-  { label: "Social", value: 27 },
-  { label: "Virtual", value: 19 },
-  { label: "Físico", value: 12 },
 ];
 
 const faq = [
@@ -122,343 +74,56 @@ const faq = [
   },
 ];
 
-const reveal = {
-  initial: { opacity: 0, y: 28, filter: "blur(8px)" },
-  whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
-  viewport: { once: true, margin: "-60px" },
-};
-
-type BullyingType = { Icon: React.ElementType; title: string; text: string };
-
-function TypeCarouselModal({ types }: { types: BullyingType[] }) {
-  const [open, setOpen] = useState(false);
-  const [idx, setIdx] = useState(0);
-
-  const next = () => setIdx((i) => (i + 1) % types.length);
-  const prev = () => setIdx((i) => (i - 1 + types.length) % types.length);
-
-  return (
-    <>
-      <motion.button
-        {...reveal}
-        onClick={() => setOpen(true)}
-        className="focus-ring glass w-full rounded-3xl px-6 py-5 text-left active:scale-[0.98]"
-      >
-        <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Tipos de Bullying</span>
-        <div className="mt-2 flex items-center justify-between">
-          <span className="text-base font-semibold">Ver Tipos de Bullying</span>
-          <span className="inline-flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-            <ChevronRight className="size-4" aria-hidden="true" />
-          </span>
-        </div>
-      </motion.button>
-
-      {open && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm"
-          onClick={() => setOpen(false)}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-sm overflow-hidden rounded-[2rem] bg-card p-6 shadow-2xl"
-          >
-              <button
-                onClick={() => setOpen(false)}
-                aria-label="Fechar"
-                className="focus-ring absolute right-4 top-4 inline-flex size-8 items-center justify-center rounded-full bg-white/10 text-muted-foreground transition-colors active:bg-white/20"
-              >
-                <X className="size-4" />
-              </button>
-
-              <div className="mb-4 text-center">
-                <span className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Tipos de Bullying</span>
-                <p className="mt-1 text-[11px] text-muted-foreground">
-                  {idx + 1} de {types.length}
-                </p>
-              </div>
-
-              <div className="min-h-[220px]">
-                <div className="flex flex-col items-center text-center">
-                  {(() => {
-                    const TypeIcon = types[idx]!.Icon;
-                    return <TypeIcon className="size-12 text-primary" aria-hidden="true" />;
-                  })()}
-                  <h3 className="mt-4 text-2xl font-semibold">{types[idx]!.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{types[idx]!.text}</p>
-                </div>
-              </div>
-
-              <div className="mt-6 flex items-center justify-between gap-4">
-                <button
-                  onClick={prev}
-                  aria-label="Tipo anterior"
-                  className="focus-ring inline-flex size-11 items-center justify-center rounded-full bg-white/10 text-foreground transition-colors active:bg-white/20"
-                >
-                  <ChevronLeft className="size-5" />
-                </button>
-
-                <div className="flex gap-1.5">
-                  {types.map((_, i) => (
-                    <span
-                      key={i}
-                      className={`block h-1.5 rounded-full transition-all ${
-                        i === idx ? "w-4 bg-primary" : "w-1.5 bg-white/25"
-                      }`}
-                    />
-                  ))}
-                </div>
-
-                <button
-                  onClick={next}
-                  aria-label="Próximo tipo"
-                  className="focus-ring inline-flex size-11 items-center justify-center rounded-full bg-white/10 text-foreground transition-colors active:bg-white/20"
-                >
-                  <ChevronRight className="size-5" />
-                </button>
-              </div>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
-
 function HomePage() {
   return (
     <PageTransition>
-      <AnimatedBackground />
-      <Navbar />
-      <MobileTopBar Icon={ShieldCheck} title="Imersão Bullying" subtitle="Realidade não Editada" />
-
-      <main className="pt-14 lg:pt-0">
-        <section
-          id="inicio"
-          className="relative flex min-h-[78dvh] items-center justify-center px-6 pt-10 text-center lg:min-h-dvh lg:pt-32"
-        >
-          <div className="mx-auto max-w-3xl">
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-              className="glass mx-auto w-fit rounded-full px-4 py-2 text-xs uppercase tracking-[0.25em] text-muted-foreground"
-            >
-              Realidade não Editada
-            </motion.p>
-            <motion.h1
-              initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ duration: 1, delay: 0.1, ease: [0.32, 0.72, 0, 1] }}
-              className="mt-6 text-4xl font-semibold leading-[1.05] text-gradient sm:text-7xl lg:mt-8 lg:text-7xl"
-            >
-              Bullying não é brincadeira.
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.25, ease: [0.32, 0.72, 0, 1] }}
-              className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground lg:mt-6 lg:text-lg"
-            >
-              Cada palavra deixa marca. Aqui você aprende a enxergar, interromper e transformar
-              situações de violência dentro da escola.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.4, ease: [0.32, 0.72, 0, 1] }}
-              className="mt-8 flex flex-wrap justify-center gap-3 lg:mt-10"
-            >
-              <Button asChild size="lg" className="rounded-full px-8">
-                <Link to="/chat"><Bot aria-hidden="true" /> Conversar com IA</Link>
-              </Button>
-              <Button asChild size="lg" variant="secondary" className="rounded-full px-8">
-                <Link to="/minigames"><Gamepad2 aria-hidden="true" /> Minigames</Link>
-              </Button>
-            </motion.div>
-          </div>
-        </section>
-
-        <section aria-label="Atalhos" className="px-4 pb-2 lg:hidden">
-          <ul className="grid grid-cols-2 gap-3">
-            {mobileShortcuts.map((s) => (
-              <li key={s.title}>
-                <Link
-                  to={s.to}
-                  {...(s.hash ? { hash: s.hash } : {})}
-                  className="focus-ring glass block rounded-3xl p-4 transition-transform active:scale-95"
-                >
-                   <s.Icon aria-hidden="true" className="size-6 text-primary" />
-                  <p className="mt-2 text-sm font-semibold">{s.title}</p>
-                  <p className="text-[11px] text-muted-foreground">{s.text}</p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section id="sobre" className="px-6 py-14 lg:py-28">
-          <SectionTitle
-            eyebrow="Sobre o Projeto"
-            title="Uma imersão que transforma o olhar"
-            subtitle="Conteúdo educativo, linguagem direta e experiências interativas para provocar reflexão real dentro da sala de aula."
-          />
-          <div className="mx-auto mt-8 grid max-w-5xl gap-4 md:grid-cols-3 lg:mt-14 lg:gap-5">
-            {[
-              { Icon: ShieldCheck, t: "Conscientizar", d: "Mostrar o impacto real das agressões." },
-              { Icon: HeartHandshake, t: "Acolher", d: "Ensinar como apoiar quem sofre." },
-              { Icon: AlertTriangle, t: "Agir", d: "Dar caminhos claros de denúncia e mediação." },
-            ].map((c, i) => (
-              <motion.div key={c.t} {...reveal} transition={{ duration: 0.7, delay: i * 0.1 }}>
-                <GlassCard interactive className="h-full p-6 lg:p-8">
-                  <c.Icon className="size-6 text-primary" aria-hidden="true" />
-                  <h3 className="mt-5 text-xl font-semibold">{c.t}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.d}</p>
-                </GlassCard>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        <section id="aprender" className="px-6 py-14 lg:py-28">
-          <SectionTitle eyebrow="Tipos de Bullying" title="Nem sempre deixa marca visível" />
-
-          {/* Mobile: single CTA that opens a carousel modal */}
-          <div className="mx-auto mt-8 max-w-md lg:hidden">
-            <TypeCarouselModal types={types} />
-          </div>
-
-          {/* Desktop: keep the original grid */}
-          <div className="mx-auto mt-8 hidden max-w-6xl gap-3 sm:grid-cols-2 lg:mt-14 lg:grid lg:grid-cols-3 lg:gap-5">
-            {types.map((t, i) => (
-              <motion.div key={t.title} {...reveal} transition={{ duration: 0.7, delay: i * 0.06 }}>
-                <GlassCard interactive className="h-full p-5 lg:p-7">
-                  <span className="glass inline-flex size-11 items-center justify-center rounded-2xl">
-                    <t.Icon className="size-5 text-primary" aria-hidden="true" />
-                  </span>
-                  <h3 className="mt-3 text-base font-semibold lg:mt-5 lg:text-lg">{t.title}</h3>
-                  <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground lg:mt-2 lg:text-sm">
-                    {t.text}
-                  </p>
-                </GlassCard>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        <section className="px-6 py-14 lg:py-28">
-          <SectionTitle eyebrow="Como Identificar" title="Sinais que pedem atenção" />
-          <GlassCard className="mx-auto mt-8 max-w-3xl p-6 lg:mt-14 lg:p-8">
-            <ul className="space-y-4">
-              {signs.map((s, i) => (
-                <motion.li
-                  key={s}
-                  {...reveal}
-                  transition={{ duration: 0.6, delay: i * 0.07 }}
-                  className="flex items-start gap-3 text-sm text-muted-foreground"
-                >
-                  <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/20">
-                    <Check className="size-3 text-primary" aria-hidden="true" />
-                  </span>
-                  {s}
-                </motion.li>
-              ))}
-            </ul>
-          </GlassCard>
-        </section>
-
-        <section className="px-6 py-14 lg:py-28">
-          <SectionTitle eyebrow="Como Prevenir" title="A prevenção é coletiva" />
-          <div className="mx-auto mt-8 grid max-w-5xl gap-4 sm:grid-cols-2 lg:mt-14 lg:gap-5">
-            {prevention.map((p, i) => (
-              <motion.div key={p.title} {...reveal} transition={{ duration: 0.7, delay: i * 0.08 }}>
-                <GlassCard interactive className="h-full p-6 lg:p-8">
-                  <h3 className="text-lg font-semibold">{p.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.text}</p>
-                </GlassCard>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        <section className="px-6 py-14 lg:py-28">
-          <SectionTitle eyebrow="Como Agir" title="Cinco passos para interromper o ciclo" />
-          <ol className="mx-auto mt-8 max-w-2xl border-l border-border pl-8 lg:mt-14">
-            {steps.map((s, i) => (
-              <motion.li
-                key={s.title}
-                {...reveal}
-                transition={{ duration: 0.7, delay: i * 0.08 }}
-                className="relative pb-10 last:pb-0"
-              >
-                <span
-                  aria-hidden="true"
-                  className="absolute -left-[41px] top-1 inline-flex size-6 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground"
-                >
-                  {i + 1}
-                </span>
-                <h3 className="text-lg font-semibold">{s.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
-              </motion.li>
-            ))}
-          </ol>
-        </section>
-
-        <section className="px-6 py-14 lg:py-28">
-          <SectionTitle
-            eyebrow="Dados Importantes"
-            title="Distribuição ilustrativa"
-            subtitle="Valores fictícios, usados apenas como exemplo visual em sala de aula."
-          />
-          <GlassCard className="mx-auto mt-8 max-w-3xl p-6 lg:mt-14 lg:p-8">
-            <ul className="space-y-6">
-              {stats.map((s, i) => (
-                <li key={s.label}>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium">{s.label}</span>
-                    <span className="text-muted-foreground">{s.value}%</span>
-                  </div>
-                  <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/10">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${s.value}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1.1, delay: i * 0.1, ease: [0.32, 0.72, 0, 1] }}
-                      className="h-full rounded-full bg-primary"
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </GlassCard>
-        </section>
-
-        <section className="px-6 py-14 lg:py-28">
-          <SectionTitle eyebrow="FAQ" title="Perguntas Frequentes" />
-          <GlassCard className="mx-auto mt-8 max-w-3xl p-4 lg:mt-14 lg:p-8">
-            <Accordion type="single" collapsible className="w-full">
-              {faq.map((f) => (
-                <AccordionItem key={f.q} value={f.q} className="border-border">
-                  <AccordionTrigger className="text-left text-base">{f.q}</AccordionTrigger>
-                  <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-                    {f.a}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </GlassCard>
-        </section>
-
-        <section className="px-6 pb-6 text-center lg:hidden">
-          <p className="text-[11px] leading-relaxed text-muted-foreground">
-            <ShieldCheck className="mr-1 inline size-3.5 text-primary" aria-hidden="true" />
-            Imersão Bullying — Realidade não Editada
-            <br />© {new Date().getFullYear()} Projeto educativo escolar.
-          </p>
-        </section>
-        <MobileTabBarSpacer />
-      </main>
-
-      <Footer />
-      <MobileTabBar />
+      <div className="home-editorial bg-background text-foreground">
+        <header className="mx-auto flex h-20 max-w-6xl items-center justify-between gap-5 border-b border-border px-5 lg:px-0">
+          <Link to="/home" className="flex items-center gap-2 text-sm font-semibold"><ShieldCheck className="size-6" /> BRE<span className="hidden font-normal text-muted-foreground sm:inline"> / Imersão Bullying</span></Link>
+          <nav aria-label="Navegação principal" className="hidden items-center gap-7 text-xs text-muted-foreground md:flex">
+            <a href="#sobre" className="hover:text-foreground">O projeto</a><a href="#aprender" className="hover:text-foreground">Aprender</a><Link to="/minigames" className="hover:text-foreground">Minigames</Link><a href="#perguntas" className="hover:text-foreground">Perguntas</a>
+          </nav>
+          <Button asChild variant="secondary" size="sm" className="rounded-full bg-foreground text-background hover:bg-foreground/90"><Link to="/chat">Conversar com IA <ArrowUpRight className="size-3.5" /></Link></Button>
+        </header>
+        <main>
+          <section id="inicio" className="relative mx-auto flex min-h-[560px] max-w-6xl items-center overflow-hidden px-5 py-20 lg:px-0">
+            <img src={solidarityImage} alt="Estudantes unidos no ambiente escolar" width={1536} height={1024} fetchPriority="high" className="editorial-hero-image absolute inset-0 h-full w-full object-cover object-right" />
+            <div className="relative z-10 max-w-[580px]">
+              <p className="mb-6 flex items-center gap-3 text-[10px] font-medium uppercase text-muted-foreground"><span className="h-1 w-5 bg-editorial-accent" /> Uma nova perspectiva</p>
+              <h1 className="text-5xl font-medium leading-[1.08] sm:text-6xl">Bullying.<br />Realidade<br />não editada.</h1>
+              <p className="mt-6 max-w-[350px] text-sm leading-6 text-muted-foreground">Por trás de uma “brincadeira”, existe uma história real. Entenda os sinais, encontre apoio e faça parte da mudança.</p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Button asChild className="rounded-full bg-foreground px-5 text-background hover:bg-foreground/90"><Link to="/minigames">Explore os desafios <ArrowUpRight /></Link></Button>
+                <Button asChild variant="outline" className="rounded-full border-border bg-background/60 px-5 hover:bg-secondary"><a href="#aprender">Entenda o bullying <ArrowDown className="size-3.5" /></a></Button>
+              </div>
+            </div>
+          </section>
+          <section id="sobre" className="mx-auto max-w-6xl border-y border-border px-5 py-6 lg:px-0">
+            <div className="flex flex-wrap items-center justify-between gap-6 text-xs text-muted-foreground"><span>Respeito não é opcional.</span><span className="flex items-center gap-2"><ShieldCheck className="size-4" /> Reconhecer</span><span className="flex items-center gap-2"><HeartHandshake className="size-4" /> Acolher</span><span className="flex items-center gap-2"><Users className="size-4" /> Transformar</span></div>
+          </section>
+          <section className="mx-auto max-w-5xl px-5 py-20 md:py-24">
+            <div className="mb-12 max-w-xl"><p className="text-[10px] uppercase text-editorial-accent">O que você leva desta imersão</p><h2 className="mt-4 text-3xl font-normal leading-tight sm:text-4xl">Um novo olhar.<br /><span className="text-muted-foreground">Atitudes que fazem diferença.</span></h2></div>
+            <div className="editorial-grid grid md:grid-cols-2">
+              <article className="pb-10 md:pr-12"><p className="text-[10px] uppercase text-editorial-accent">01 / Reconhecer</p><h3 className="mt-3 text-3xl font-normal">Nem tudo é brincadeira.</h3><p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">Intenção de machucar, repetição e desequilíbrio de poder. Reconhecer esse padrão é o primeiro passo.</p><div className="mt-8 space-y-3"><div className="editorial-bar h-2 w-4/5 rounded-r-full" /><p className="text-xs text-muted-foreground">Uma palavra pode deixar marcas invisíveis.</p><div className="h-2 w-1/2 rounded-r-full bg-secondary" /></div></article>
+              <article className="py-10 md:py-0 md:pb-10 md:pl-12"><p className="text-[10px] uppercase text-editorial-accent">02 / Acolher</p><h3 className="mt-3 text-3xl font-normal">Ninguém precisa ficar só.</h3><p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">Escutar sem julgar, não compartilhar ofensas e procurar um adulto de confiança são atitudes de proteção.</p><div className="mt-8 flex items-center gap-4"><HeartHandshake className="size-12 text-editorial-accent" strokeWidth={1} /><span className="text-sm">Sua presença<br /><span className="text-muted-foreground">pode mudar uma história.</span></span></div></article>
+              <article className="py-10 md:pr-12"><p className="text-[10px] uppercase text-editorial-accent">03 / Experimentar</p><h3 className="mt-3 text-3xl font-normal">Aprender na prática.</h3><p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">Situações reais, escolhas e reflexões. Explore os jogos e descubra diferentes formas de agir.</p><Button asChild variant="link" className="mt-5 h-auto p-0 text-foreground"><Link to="/minigames">Ir para os minigames <ArrowUpRight /></Link></Button></article>
+              <article className="py-10 md:pl-12"><p className="text-[10px] uppercase text-editorial-accent">04 / Conversar</p><h3 className="mt-3 text-3xl font-normal">Toda dúvida tem espaço.</h3><p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">Converse com a IA educativa sobre sinais de alerta, formas de apoiar e caminhos para pedir ajuda.</p><Button asChild variant="link" className="mt-5 h-auto p-0 text-foreground"><Link to="/chat">Conhecer a IA Bullying <ArrowUpRight /></Link></Button></article>
+            </div>
+          </section>
+          <section id="aprender" className="border-y border-border">
+            <div className="mx-auto max-w-5xl px-5 py-20"><p className="text-[10px] uppercase text-editorial-accent">Além do que os olhos veem</p><h2 className="mt-4 max-w-lg text-3xl font-normal sm:text-4xl">O bullying tem muitas formas.<br /><span className="text-muted-foreground">Todas merecem atenção.</span></h2>
+              <div className="mt-12 grid gap-x-12 sm:grid-cols-2">{types.map(({ Icon, title, text }, index) => <article key={title} className="flex gap-4 border-t border-border py-6"><span className="pt-1 text-[10px] text-muted-foreground">0{index + 1}</span><div className="flex-1"><h3 className="flex items-center gap-2 text-lg"><Icon className="size-4 text-editorial-accent" />{title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{text}</p></div></article>)}</div>
+            </div>
+          </section>
+          <section className="mx-auto grid max-w-5xl gap-12 px-5 py-20 md:grid-cols-2"><div><p className="text-[10px] uppercase text-editorial-accent">Perceber é cuidar</p><h2 className="mt-4 text-3xl font-normal">Sinais que<br />pedem atenção.</h2><p className="mt-4 max-w-sm text-sm leading-6 text-muted-foreground">Um sinal isolado não confirma bullying. Mudanças persistentes merecem escuta e acompanhamento.</p></div><ul className="space-y-5">{signs.map(sign => <li key={sign} className="flex items-start gap-3 text-sm leading-6 text-muted-foreground"><Check className="mt-1 size-4 shrink-0 text-editorial-accent" />{sign}</li>)}</ul></section>
+          <section className="border-y border-border"><div className="mx-auto max-w-5xl px-5 py-20"><h2 className="text-3xl font-normal">Do silêncio à ação.</h2><ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-5">{steps.map((step, index) => <li key={step.title}><span className="text-xs text-editorial-accent">0{index + 1}</span><h3 className="mt-4 text-lg">{step.title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{step.text}</p></li>)}</ol></div></section>
+          <section id="perguntas" className="mx-auto max-w-3xl px-5 py-20"><h2 className="mb-8 text-center text-3xl font-normal">Vamos esclarecer algumas coisas.</h2><Accordion type="single" collapsible>{faq.map(item => <AccordionItem key={item.q} value={item.q}><AccordionTrigger className="py-5 text-left text-base font-normal">{item.q}</AccordionTrigger><AccordionContent className="text-sm leading-6 text-muted-foreground">{item.a}</AccordionContent></AccordionItem>)}</Accordion></section>
+          <section className="border-t border-border px-5 py-16 text-center"><p className="text-xs text-editorial-accent">O próximo passo pode ser seu.</p><h2 className="mx-auto mt-4 max-w-xl text-3xl font-normal sm:text-4xl">Uma escola mais segura<br />começa com a gente.</h2><Button asChild className="mt-7 rounded-full bg-foreground text-background hover:bg-foreground/90"><Link to="/chat">Vamos conversar <ArrowUpRight /></Link></Button></section>
+          <MobileTabBarSpacer />
+        </main>
+        <Footer />
+        <MobileTabBar />
+      </div>
     </PageTransition>
   );
 }
