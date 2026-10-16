@@ -8,6 +8,7 @@ const links = [
   { label: "Início", to: "/home", hash: "inicio" },
   { label: "Sobre", to: "/home", hash: "sobre" },
   { label: "Aprender", to: "/home", hash: "aprender" },
+  { label: "Dados", to: "/dados", hash: undefined },
   { label: "Minigames", to: "/minigames", hash: undefined },
   { label: "IA Educacional", to: "/chat", hash: undefined },
   { label: "Contato", to: "/home", hash: "contato" },

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowDown,
   ArrowUpRight,
+  BarChart3,
   Brain,
   Check,
   Globe,
@@ -121,6 +122,10 @@ function HomePage() {
               Perguntas
             </a>
           </nav>
+          <div className="flex items-center gap-2">
+          <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link to="/dados"><BarChart3 className="size-3.5" /> Dados</Link>
+          </Button>
           <Button
             asChild
             variant="secondary"
@@ -128,9 +133,10 @@ function HomePage() {
             className="rounded-full bg-foreground text-background hover:bg-foreground/90"
           >
             <Link to="/chat">
-              Conversar com IA <ArrowUpRight className="size-3.5" />
+              <span className="sm:hidden">IA</span><span className="hidden sm:inline">Conversar com IA</span> <ArrowUpRight className="size-3.5" />
             </Link>
           </Button>
+          </div>
         </header>
         <main>
           <section
