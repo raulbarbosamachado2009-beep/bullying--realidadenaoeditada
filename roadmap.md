@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Adicionar botão Dados, gráfico de porcentagens contextualizadas e as cinco fontes solicitadas
+
 - [ ] Aplicar exclusivamente as quatro fontes San Francisco enviadas em todo o site
 - [ ] Recriar IA conforme nova referência em modo escuro, preservando identidade do cabeçalho
 - [ ] Reformular Home conforme referência Gladia e entregar preview verificado
