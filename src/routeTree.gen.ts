@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ChatRouteImport } from './routes/chat'
+import { Route as DadosRouteImport } from './routes/dados'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as MinigamesRouteImport } from './routes/minigames'
 import { Route as PerfilRouteImport } from './routes/perfil'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const ChatRoute = ChatRouteImport.update({
   id: '/chat',
   path: '/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DadosRoute = DadosRouteImport.update({
+  id: '/dados',
+  path: '/dados',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeRoute = HomeRouteImport.update({
@@ -50,6 +56,7 @@ const ApiChatRoute = ApiChatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
+  '/dados': typeof DadosRoute
   '/home': typeof HomeRoute
   '/minigames': typeof MinigamesRoute
   '/perfil': typeof PerfilRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
+  '/dados': typeof DadosRoute
   '/home': typeof HomeRoute
   '/minigames': typeof MinigamesRoute
   '/perfil': typeof PerfilRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
+  '/dados': typeof DadosRoute
   '/home': typeof HomeRoute
   '/minigames': typeof MinigamesRoute
   '/perfil': typeof PerfilRoute
@@ -74,13 +83,16 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/chat' | '/home' | '/minigames' | '/perfil' | '/api/chat'
+  fullPaths:
+    '/' | '/chat' | '/dados' | '/home' | '/minigames' | '/perfil' | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/chat' | '/home' | '/minigames' | '/perfil' | '/api/chat'
+  to:
+    '/' | '/chat' | '/dados' | '/home' | '/minigames' | '/perfil' | '/api/chat'
   id:
     | '__root__'
     | '/'
     | '/chat'
+    | '/dados'
     | '/home'
     | '/minigames'
     | '/perfil'
@@ -90,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChatRoute: typeof ChatRoute
+  DadosRoute: typeof DadosRoute
   HomeRoute: typeof HomeRoute
   MinigamesRoute: typeof MinigamesRoute
   PerfilRoute: typeof PerfilRoute
@@ -110,6 +123,13 @@ declare module '@tanstack/react-router' {
       path: '/chat'
       fullPath: '/chat'
       preLoaderRoute: typeof ChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dados': {
+      id: '/dados'
+      path: '/dados'
+      fullPath: '/dados'
+      preLoaderRoute: typeof DadosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home': {
@@ -146,6 +166,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChatRoute: ChatRoute,
+  DadosRoute: DadosRoute,
   HomeRoute: HomeRoute,
   MinigamesRoute: MinigamesRoute,
   PerfilRoute: PerfilRoute,

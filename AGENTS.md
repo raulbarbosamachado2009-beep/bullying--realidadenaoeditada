@@ -12,3 +12,4 @@
 - Register uploaded font assets centrally in the root document and map all font roles to the shared family, so every screen uses the same supplied typography.
 - Compose chat messages, transcript, input, and loading states with AI Elements while preserving the existing streaming transport.
 - Keep the educational Home as an editorial page with its own navigation, leaving shared navigation on other screens unchanged.
+- Keep statistics and source context in a shared data module; render them on a dedicated Dados route so percentages stay traceable and never become a normalized distribution.
