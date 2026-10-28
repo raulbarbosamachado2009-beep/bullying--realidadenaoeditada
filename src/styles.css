@@ -295,3 +295,7 @@
   border-color: var(--border);
   box-shadow: var(--shadow-composer);
 }
+.chat-composer-row [data-slot="input-group"] {
+  flex-direction: row;
+  align-items: center;
+}
