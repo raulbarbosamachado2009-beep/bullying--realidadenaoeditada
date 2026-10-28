@@ -20,7 +20,11 @@ class MiniGl {
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
-    const gl = this.canvas.getContext("webgl", { antialias: true });
+    const gl = this.canvas.getContext("webgl", {
+      antialias: false,
+      powerPreference: "low-power",
+      failIfMajorPerformanceCaveat: true,
+    });
     if (!gl) throw new Error("WebGL not supported");
     this.gl = gl;
 
@@ -607,6 +611,7 @@ export function GradientWave({
   const gradientRef = useRef<Gradient | null>(null);
   const colorKey = colors.join(",");
   const deformKey = JSON.stringify(deform ?? {});
+  const noiseKey = noiseFrequency.join(",");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -630,7 +635,7 @@ export function GradientWave({
       const u = gradient.mesh.material.uniforms;
       u.u_shadow_power.value = shadowPower;
       u.u_darken_top.value = darkenTop ? 1 : 0;
-      u.u_global.value.noiseFreq.value = noiseFrequency;
+      u.u_global.value.noiseFreq.value = noiseKey.split(",").map(Number);
       u.u_global.value.noiseSpeed.value = noiseSpeed;
 
       const d = JSON.parse(deformKey) as Record<string, number | number[]>;
@@ -638,17 +643,35 @@ export function GradientWave({
         if (u.u_vertDeform.value[key]) u.u_vertDeform.value[key].value = value;
       });
 
-      if (isPlaying) gradient.start();
+      if (isPlaying && !document.hidden) gradient.start();
     } catch (error) {
-      console.error("Failed to initialize gradient:", error);
+      console.warn("Animated background disabled:", error);
     }
 
+    // Pause while the tab is hidden so the GPU is not kept busy in the background.
+    const onVisibility = () => {
+      const g = gradientRef.current;
+      if (!g) return;
+      if (document.hidden) {
+        g.isPlaying = false;
+        if (g.animationId) cancelAnimationFrame(g.animationId);
+      } else if (isPlaying && !g.isPlaying) {
+        g.isPlaying = true;
+        g.animationId = requestAnimationFrame(g.animate);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
     return () => {
-      gradientRef.current?.stop();
+      document.removeEventListener("visibilitychange", onVisibility);
+      const g = gradientRef.current;
+      g?.stop();
+      // Release the GPU context immediately instead of waiting for garbage collection.
+      g?.minigl?.gl?.getExtension("WEBGL_lose_context")?.loseContext();
       gradientRef.current = null;
       if (container.contains(canvas)) container.removeChild(canvas);
     };
-  }, [colorKey, deformKey, isPlaying, shadowPower, darkenTop, noiseSpeed, noiseFrequency]);
+  }, [colorKey, deformKey, noiseKey, isPlaying, shadowPower, darkenTop, noiseSpeed]);
 
   return <div ref={containerRef} className={`relative h-full w-full overflow-hidden ${className}`} />;
 }
