@@ -266,7 +266,7 @@ function ChatPage() {
 
   return (
     <PageTransition>
-      <div className="chat-light flex h-dvh bg-background text-foreground">
+      <div className="chat-dark flex h-dvh bg-background text-foreground">
         <aside className="hidden w-[260px] shrink-0 flex-col border-r border-border bg-chat-sidebar md:flex">
           <div className="flex h-14 items-center justify-between px-3">
             <img
