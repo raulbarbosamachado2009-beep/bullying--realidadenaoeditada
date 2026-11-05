@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Verificar todos os links da página Dados e corrigir destinos indisponíveis
+
 - [x] Adicionar botão Dados, gráfico de porcentagens contextualizadas e as cinco fontes solicitadas
 
 - [ ] Aplicar exclusivamente as quatro fontes San Francisco enviadas em todo o site
