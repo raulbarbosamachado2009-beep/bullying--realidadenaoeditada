@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Verificar todos os links da página Dados e corrigir destinos indisponíveis
+- [x] Verificar todos os links da página Dados: navegação e cinco destinos externos acessíveis; dois links StopBullying.gov existem, mas bloqueiam acesso automático, sem substituição necessária
 
 - [x] Adicionar botão Dados, gráfico de porcentagens contextualizadas e as cinco fontes solicitadas
 
