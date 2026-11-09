@@ -48,22 +48,22 @@ export const Route = createFileRoute("/home")({
 });
 
 const types = [
-  { Icon: Zap, title: "Físico", text: "Empurrões, chutes, agressões e danos a pertences." },
-  { Icon: MessageSquare, title: "Verbal", text: "Apelidos, xingamentos, humilhações e ameaças." },
-  { Icon: Brain, title: "Psicológico", text: "Chantagem, manipulação, intimidação e perseguição." },
-  { Icon: Globe, title: "Virtual", text: "Cyberbullying: exposição e ataques em redes e grupos." },
-  { Icon: Users, title: "Social", text: "Exclusão deliberada, boatos e isolamento do grupo." },
-  { Icon: Sparkle, title: "Racial", text: "Ofensas relacionadas a raça, cor, etnia ou origem." },
-  { Icon: Landmark, title: "Religioso", text: "Zombarias e discriminação por crença ou fé." },
+  { Icon: Zap, title: "Físico", text: "Empurrões, chutes, socos, puxões e outras agressões físicas, além de danos ou destruição de pertences pessoais. Quando essas ações são intencionais, repetidas e envolvem um desequilíbrio de poder, caracterizam bullying físico. Podem causar lesões, medo e insegurança no ambiente escolar, prejudicando a participação nas aulas e a convivência. Mesmo um episódio isolado de agressão deve ser levado a sério e receber atenção." },
+  { Icon: MessageSquare, title: "Verbal", text: "Apelidos ofensivos, xingamentos, ameaças, provocações e humilhações constantes. Mesmo sem contato físico, palavras podem causar sofrimento emocional, afetar a autoestima e abalar a confiança de quem é alvo dessas agressões. Quando alguém demonstra desconforto, insistir na ofensa não é uma brincadeira: é uma atitude que exige intervenção e respeito aos limites da outra pessoa." },
+  { Icon: Brain, title: "Psicológico", text: "Intimidação, manipulação, perseguição, chantagem e comportamentos que geram medo ou constrangimento. Muitas vezes, esse tipo de bullying acontece de maneira silenciosa, longe da atenção de outras pessoas, mas pode provocar danos emocionais profundos. A pessoa atingida pode sentir que precisa mudar seu comportamento para evitar novas agressões. Ouvir sem julgar e oferecer apoio são atitudes essenciais para ajudá-la a buscar proteção." },
+  { Icon: Globe, title: "Virtual", text: "Conhecido como cyberbullying, acontece por meio de mensagens, redes sociais, grupos online, comentários e publicações ofensivas. Pode envolver ameaças, exposição de informações pessoais e compartilhamento de imagens para humilhar alguém. A rapidez da internet, a permanência das publicações e o compartilhamento por outras pessoas podem aumentar o alcance e o impacto das agressões. Não repassar esse conteúdo, guardar os registros com segurança e procurar um adulto de confiança são formas de buscar ajuda." },
+  { Icon: Users, title: "Social", text: "Exclusão proposital, espalhamento de boatos, fofocas e isolamento da convivência em grupos. Esse comportamento pode fazer com que a pessoa se sinta rejeitada e sozinha, prejudicando seus vínculos e sua participação nas atividades escolares. Nem todo afastamento entre colegas é bullying, mas excluir repetidamente alguém com a intenção de machucar ou incentivar outras pessoas a fazer o mesmo exige atenção. Promover a inclusão e não alimentar boatos ajuda a interromper essas atitudes." },
+  { Icon: Sparkle, title: "Racial", text: "Ofensas, piadas preconceituosas e discriminação relacionadas à raça, cor, etnia ou origem. Além de poder constituir bullying, esse comportamento representa uma manifestação de preconceito e intolerância e pode configurar racismo. Características como a cor da pele, o cabelo e a identidade cultural nunca justificam humilhação ou tratamento desigual. Mesmo sem repetição, uma agressão racista é grave e deve ser acolhida, registrada e encaminhada para as medidas de proteção cabíveis." },
+  { Icon: Landmark, title: "Religioso", text: "Zombarias, comentários ofensivos, preconceito e desrespeito direcionados à religião, crença ou prática de fé de uma pessoa. Essas atitudes podem atingir símbolos, roupas, costumes e tradições, causando constrangimento e exclusão. Toda pessoa merece respeito, independentemente de sua crença ou de não seguir uma religião. A convivência harmoniosa se constrói com diálogo, liberdade de consciência e respeito às diferenças, sem imposições ou humilhações." },
 ];
 
 const signs = [
-  "Queda repentina no rendimento escolar",
-  "Recusa constante em ir à escola",
-  "Objetos pessoais danificados ou perdidos",
-  "Mudança de humor, irritabilidade ou tristeza",
-  "Isolamento de amigos e atividades",
-  "Queixas frequentes de dores sem causa aparente",
+  "Queda repentina no rendimento escolar, dificuldade de concentração e perda de interesse pelos estudos, especialmente quando representam uma mudança em relação ao comportamento habitual.",
+  "Recusa constante em frequentar a escola, demonstrando medo, ansiedade ou desconforto ao falar sobre o ambiente escolar, determinados colegas ou momentos da rotina.",
+  "Objetos pessoais perdidos ou danificados, como materiais escolares, roupas ou itens de uso diário, principalmente quando isso acontece repetidamente ou vem acompanhado de receio de explicar o ocorrido.",
+  "Mudanças de humor frequentes, incluindo irritação, tristeza, ansiedade, nervosismo ou desânimo constante, que merecem acolhimento e atenção, sem julgamentos. Baixa autoestima, insegurança excessiva e perda de confiança em si mesmo, acompanhadas, por exemplo, de falas negativas sobre a própria aparência, capacidade ou valor pessoal.",
+  "Isolamento social, afastamento de amigos, atividades e momentos de convivência, inclusive daqueles que antes despertavam interesse e satisfação.",
+  "Queixas físicas recorrentes, como dores de cabeça, dores de estômago ou mal-estar sem causa aparente. Esses sintomas são reais e podem precisar de avaliação de saúde, sem presumir que sejam causados por bullying. Alterações no sono ou no apetite, que podem refletir o impacto emocional da situação e merecem atenção quando persistem ou interferem no bem-estar cotidiano.",
 ];
 
 const steps = [
@@ -314,8 +314,7 @@ function HomePage() {
                 pedem atenção.
               </h2>
               <p className="mt-4 max-w-sm text-sm leading-6 text-muted-foreground">
-                Um sinal isolado não confirma bullying. Mudanças persistentes merecem escuta e
-                acompanhamento.
+                Um sinal isolado não confirma bullying, mas mudanças frequentes e persistentes no comportamento podem indicar que algo está acontecendo. Esses sinais também podem ter outras causas e precisam ser compreendidos com cuidado. A observação, o diálogo e o acompanhamento são fundamentais para oferecer apoio: escute com calma, faça perguntas sem pressionar e demonstre que a pessoa não precisa enfrentar a situação sozinha. Importante: o bullying envolve comportamentos agressivos intencionais e repetidos, com desequilíbrio de poder, e pode afetar a saúde emocional, o desenvolvimento social, a aprendizagem e o bem-estar de quem sofre essas agressões. Reconhecer os sinais precocemente e buscar ajuda de familiares, professores ou profissionais de apoio faz toda a diferença para interromper o ciclo de violência e promover um ambiente mais seguro e acolhedor. Quem sofre bullying não tem culpa pelo que acontece e não deve ser responsabilizado por resolver a situação sozinho. Cabe aos adultos e à escola acolher o relato, avaliar os riscos, adotar medidas de proteção e acompanhar a situação. Mesmo quando uma agressão não se enquadra na definição de bullying, ela deve ser levada a sério.
               </p>
             </div>
             <ul className="space-y-5">
